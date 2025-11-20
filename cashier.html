@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cashier - Student Fines</title>
+<style>
+        .words{
+        background:#002a01;
+        padding:15px;
+        display:flex;
+    }
+    .words h1,.words p{color:white;margin:0;}
+    .words img{width:100px;height:100px;}
+    .header1{margin-left:15px;}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f1f1f1;
+}
+.header {
+    background: #002a01;
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+}
+.header h1 { margin: 0; font-size: 24px; }
+nav {
+    background-color: #006800;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+nav a { color: white; text-decoration: none; font-weight: bold; margin-right: 15px; }
+.right { margin-left: auto; }
+.table-container {
+    width: 90%;
+    margin: 20px auto;
+    overflow-x: auto;
+}
+.fine-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.fine-table th, .fine-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+.fine-table th { background-color: #006800; color: white; }
+.fine-table tr:hover { background-color: #f0f0f0; }
+.pay-btn {
+    background-color: #006800;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.paid {
+    background-color: gray;
+    cursor: default;
+}
+</style>
+</head>
+<body>
+<div class="words">
+    <img src="logo.jpg">
+    <div class="header1">
+        <h1>Mountain Province State University</h1><br>
+        <p>Bontoc Campus</p>
+        <p>Library</p>
+    </div>
+</div>
+<div class="header">
+    <h1>Cashier - Student Fines</h1>
+</div>
+
+<nav>
+    <a href="cashier_home.html">Home</a>
+    <div class="right">
+        <a href="login.html" id="logoutBtn">Logout</a>
+    </div>
+</nav>
+
+<div class="table-container">
+    <table class="fine-table" id="fineTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Student ID</th>
+                <th>Fine Description</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Students with fines dynamically inserted here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+// Default students with fines
+let students = [
+    {id:1, name:"Decson Piditen", studentId:"23-0001", fine:"Overdue book", amount:50, paid:false},
+    {id:2, name:"Kate Balawag", studentId:"23-0002", fine:"Lost book", amount:100, paid:false},
+    {id:3, name:"Juan Bantasan", studentId:"23-0003", fine:"Overdue book", amount:30, paid:true},
+    {id:4, name:"Jun jun", studentId:"23-0004", fine:"Overdue book", amount:20, paid:false},
+    {id:5, name:"Keyymitt", studentId:"23-0005", fine:"Damaged book", amount:70, paid:false},
+    {id:6, name:"Jefferson Paleg", studentId:"23-0006", fine:"Overdue book", amount:40, paid:true},
+];
+
+// Save to localStorage if not exists
+if(!localStorage.getItem("students")) localStorage.setItem("students", JSON.stringify(students));
+students = JSON.parse(localStorage.getItem("students"));
+
+function displayFines(){
+    const tbody = document.querySelector("#fineTable tbody");
+    tbody.innerHTML = "";
+    students.forEach((s,i)=>{
+        tbody.innerHTML += `
+            <tr>
+                <td>${s.name}</td>
+                <td>${s.studentId}</td>
+                <td>${s.fine}</td>
+                <td>₱${s.amount}</td>
+                <td>
+                    <button class="pay-btn ${s.paid ? 'paid' : ''}" ${s.paid ? 'disabled' : ''} onclick="markPaid(${i})">
+                        ${s.paid ? 'Paid' : 'Mark as Paid'}
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+
+
+// Logout button
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+    alert("Logged out!");
+    window.location.href = "index.html";
+});
+
+// Initial display
+displayFines();
+</script>
+
+</body>
+</html>
